@@ -4,6 +4,8 @@ import { defineStore } from 'pinia'
 import { handleAxiosError } from '@/helpers';
 import type { ICategory } from '../interfaces';
 import categoryService from '../services/category.service';
+import { toast } from 'vue-sonner';
+import router from '@/router';
 
 
 
@@ -27,15 +29,32 @@ export const useCategoryStore = defineStore('category', () => {
 
     }
 
+    const createCategory = async (category: { name: string, description: string }, image: File) => {
+        try {
+            const response = await categoryService.create(category, image)
+            toast.success(response.message, {
+                description: "Categoria: " + response.category.name
+            })
+
+            router.push('/admin/categories');
+
+            await getAllCategories();
+
+        } catch (error) {
+            handleAxiosError(error);
+        }
+    }
+
     onMounted( async () => {
         await getAllCategories();
     })
 
     return {
         // STATES
-        categories
+        categories,
 
         // METHODS
+        createCategory
         
     }
 

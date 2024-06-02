@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { useCategoryStore } from '../stores/category.store';
+
 import { formatDate } from '../../../lib/format-date';
+import { useCategoryStore } from '../stores/category.store';
 
 
 const categoryStore = useCategoryStore();
@@ -25,9 +26,12 @@ const categoryStore = useCategoryStore();
             <ul class="space-y-6">
                 <li v-for="category in categoryStore.categories" :key="category.id" class="grid grid-cols-6 text-gray-300 gap-4">
                     <p>{{ category.id }}</p>
-                    <p>{{ category.image }}</p>
+                    <div>
+                        <img class="max-w-12" :src="category.image" :alt="category.name">
+
+                    </div>
                     <p>{{ category.name }}</p>
-                    <p>{{ category.description }}</p>
+                    <p class="line-clamp-1">{{ category.description }}</p>
                     <p>{{ formatDate( category.createdAt ) }}</p>
                     <div>
                         Acciones

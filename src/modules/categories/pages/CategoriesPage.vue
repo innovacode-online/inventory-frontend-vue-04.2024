@@ -9,7 +9,7 @@ import CategoryTable from "@/modules/categories/components/CategoryTable.vue";
         btn-title="Agregar categoria"
         title="Categorias"
         description="Gestiona las categorias del inventario"
-        path-name="categories"
+        path-name="new-category"
     />
 
     <CategoryTable/>

@@ -45,6 +45,20 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
+    const deleteCategoryById = async (id: number) => {
+        try {
+            
+            const response = await categoryService.remove(id);
+            toast.success(response);
+
+            await getAllCategories();
+
+        } catch (error) {
+            handleAxiosError(error);
+        }
+    }
+
+
     onMounted( async () => {
         await getAllCategories();
     })
@@ -54,7 +68,8 @@ export const useCategoryStore = defineStore('category', () => {
         categories,
 
         // METHODS
-        createCategory
+        createCategory,
+        deleteCategoryById,
         
     }
 

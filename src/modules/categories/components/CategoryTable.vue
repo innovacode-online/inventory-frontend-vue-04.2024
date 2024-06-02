@@ -2,7 +2,7 @@
 
 import { formatDate } from '../../../lib/format-date';
 import { useCategoryStore } from '../stores/category.store';
-
+import CategoryTableActions from "@/modules/categories/components/CategoryTableActions.vue";
 
 const categoryStore = useCategoryStore();
 
@@ -34,8 +34,9 @@ const categoryStore = useCategoryStore();
                     <p class="line-clamp-1">{{ category.description }}</p>
                     <p>{{ formatDate( category.createdAt ) }}</p>
                     <div>
-                        Acciones
-
+                        <CategoryTableActions
+                            :category="category"
+                        />
                     </div>
                     
                 </li>

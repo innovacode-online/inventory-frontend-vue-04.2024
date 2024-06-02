@@ -68,8 +68,28 @@ async function uploadImage(image: File) {
 
 }
 
+async function remove(id: number) {
+    const token = localStorage.getItem('auth-token');
+
+    try {
+        const { data } = await inventoryDb.delete<{ message: string }>(`/categories/${id}`, {
+            headers: {
+                Authorization: 'Bearer ' + token
+            }
+        });
+
+        return data.message;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+
+    
+}
+
 
 export default {
     find,
-    create
+    create,
+    remove
 }

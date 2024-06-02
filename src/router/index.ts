@@ -3,6 +3,7 @@ import AuthLayout from '@/modules/auth/layouts/AuthLayout.vue'
 import RootLayout from '@/modules/shared/layouts/RootLayout.vue'
 import authService from '@/modules/auth/services/auth.service'
 import { handleAxiosError } from '@/helpers'
+import { useAuthStore } from '../modules/auth/stores/auth.store';
 
 
 const router = createRouter({
@@ -28,6 +29,25 @@ const router = createRouter({
           // LAZY LOADING -> Carga perezosa
           component: () => import('@/modules/products/pages/ProductsPage.vue')
         },
+        {
+          path: 'sales',
+          name: 'sales',
+          // LAZY LOADING -> Carga perezosa
+          component: () => import('@/modules/sales/pages/SalesPage.vue')
+        },
+        {
+          path: 'cart',
+          name: 'cart',
+          // LAZY LOADING -> Carga perezosa
+          component: () => import('@/modules/cart/pages/CartPage.vue')
+        },
+        {
+          path: 'checkout',
+          name: 'checkout',
+          // LAZY LOADING -> Carga perezosa
+          component: () => import('@/modules/cart/pages/CheckoutPage.vue')
+        },
+
 
       ]
     },
@@ -48,7 +68,8 @@ const router = createRouter({
 
 
 router.beforeEach(async ( to, form, next ) => {
-
+  const authStore = useAuthStore();
+  
   const requiresAuth = to.matched.some(url => url.meta.requiresAuth);
 
   if( requiresAuth ){
@@ -62,6 +83,9 @@ router.beforeEach(async ( to, form, next ) => {
 
     try {
       const user = await authService.checkToken(token);
+
+      authStore.user = user;
+      authStore.token = token;
 
       localStorage.setItem('auth-token', token);
       localStorage.setItem('auth-user', JSON.stringify(user));

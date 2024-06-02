@@ -1,11 +1,12 @@
-import { ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { defineStore } from "pinia";
-import router from "@/router";
 
-import type { IUser } from "../interfaces";
+import router from "@/router";
 import { handleAxiosError } from "@/helpers";
-import authService from "../services/auth.service";
+
 import { toast } from "vue-sonner";
+import type { IUser } from "../interfaces";
+import authService from "../services/auth.service";
 
 
 
@@ -36,12 +37,27 @@ export const useAuthStore = defineStore('auth', () => {
 
     }
     
-    const logout = async () => {}
+    const logout = async () => {
+        try {
+            await authService.logout(token.value!);
+            localStorage.removeItem('auth-token');
+            localStorage.removeItem('auth-user');
+
+            router.push('/auth/login');
+        } catch (error) {
+            console.log(error);
+            handleAxiosError(error);
+        }
+    }
+
 
 
     return {
         user,
         token,
+
+        username: computed( () => user.value?.name ),
+        useremail: computed( () => user.value?.email ),
 
         // methods
         login,

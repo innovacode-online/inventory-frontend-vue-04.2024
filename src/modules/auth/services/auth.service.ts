@@ -23,7 +23,25 @@ const login = async (email: string, password: string) => {
 
 const checkToken = async (token: string) => {
     try {
-        const { data } = await inventoryDb.post<IUser>('/auth/checkToken',{}, {
+        const { data } = await inventoryDb.post<{ user: IUser}>('/auth/checkToken',{}, {
+            headers: {
+                Authorization: 'Bearer ' + token
+            }
+        })
+
+        return data.user;
+    } catch (error) {
+        throw error;        
+    }
+} 
+
+
+const logout = async (token: string) => {
+
+    console.log(token)
+
+    try {
+        const { data } = await inventoryDb.post<IUser>('/auth/logout',{}, {
             headers: {
                 Authorization: 'Bearer ' + token
             }
@@ -33,12 +51,10 @@ const checkToken = async (token: string) => {
     } catch (error) {
         throw error;        
     }
-} 
-
-
-
+}
 
 export default {
     login,
+    logout,
     checkToken
 }

@@ -58,6 +58,18 @@ export const useCategoryStore = defineStore('category', () => {
         }
     }
 
+    const updateCategoryById = async (category: { id: number, name: string, description: string }, image: File) => { 
+        try {
+            
+            const response = await categoryService.update( category, image);
+            toast.success(response.message);
+            await getAllCategories();
+
+        } catch (error) {
+            handleAxiosError(error);
+        }
+    }
+
 
     onMounted( async () => {
         await getAllCategories();
@@ -70,6 +82,7 @@ export const useCategoryStore = defineStore('category', () => {
         // METHODS
         createCategory,
         deleteCategoryById,
+        updateCategoryById
         
     }
 

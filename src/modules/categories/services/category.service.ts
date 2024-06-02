@@ -1,5 +1,5 @@
 import inventoryDb from "@/api/inventoryDb";
-import type { ICategoriesResponse, ICreateCategoryResponse } from "../interfaces";
+import type { ICategoriesResponse, ICreateCategoryResponse, IUpdateCategoryResponse } from "../interfaces";
 import axios from "axios";
 
 
@@ -82,8 +82,50 @@ async function remove(id: number) {
     } catch (error) {
         console.log(error)
         throw error;
+    }   
+}
+
+async function update(category: { id: number, name: string, description: string }, image: File) {
+    const token = localStorage.getItem('auth-token');
+
+
+    try {
+        if( !image ){
+        
+            const { data } = await inventoryDb.put<IUpdateCategoryResponse>(`/categories/${category.id}`, {
+                name: category.name,
+                description: category.description,
+            }, {
+                headers: {
+                    Authorization: 'Bearer ' + token
+                }
+            })
+    
+            return data;
+        }
+
+
+        const imageUrl = await uploadImage(image)
+
+        const updateCategory = {
+            ...category,
+            image: imageUrl
+        }
+
+        const { data } = await inventoryDb.put<IUpdateCategoryResponse>(`/categories/${category.id}`, updateCategory, {
+            headers: {
+                Authorization: 'Bearer ' + token
+            }
+        })
+
+        return data;
+
+    } catch (error) {
+        console.log(error)
+        throw error;
     }
 
+    
     
 }
 
@@ -91,5 +133,6 @@ async function remove(id: number) {
 export default {
     find,
     create,
-    remove
+    remove,
+    update
 }

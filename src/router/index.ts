@@ -35,6 +35,11 @@ const router = createRouter({
           component: () => import('@/modules/products/pages/ProductsPage.vue')
         },
         {
+          path: 'products/new',
+          name: 'new-product',
+          component: () => import('@/modules/products/pages/NewProductPage.vue')
+        },
+        {
           path: 'sales',
           name: 'sales',
           // LAZY LOADING -> Carga perezosa
